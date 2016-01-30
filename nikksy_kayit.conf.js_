@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <body>
-	<caption>联赛第二季(nikksy/lol2_source) target(nikksy/lol2)</caption>
+	<caption>联赛报名(nikksy/kayit_source) target(nikksy/kayit)</caption>
 	<content>
 	<![CDATA[
 		// 载入插件 {{{
@@ -21,25 +21,18 @@
 		// 定义工作路径 {{{
 		var paths = {
 			js: {
-				src: ['../nikksy/nl_lol/2_source/**/*.js'],
-				dest: '../nikksy/nl_lol/2',
-				src1: ['../nikksy/kayit_source/**/*.js'],
-				dest1: '../nikksy/kayit',
+				src: ['../nikksy/kayit_source/**/*.js'],
+				dest: '../nikksy/kayit/',
 				map: '.'
 			},
 			html: {
-				src: '../nikksy/nl_lol/2_source/*.html',
-				dest: '../nikksy/nl_lol/2',
-				src1: '../nikksy/kayit_source/*.html',
-				dest1: '../nikksy/kayit'
+				src: '../nikksy/kayit_source/*.html',
+				dest: '../nikksy/kayit/'
 			},
 			less: {
-				watch: '../nikksy/nl_lol/2_source/**/*.less',
-				src: '../nikksy/nl_lol/2_source/css/main.less',
-				dest: '../nikksy/nl_lol/2/css',
-				watch1: '../nikksy/kayit_source/**/*.less',
-				src1: '../nikksy/kayit_source/css/main.less',
-				dest1: '../nikksy/kayit/css'
+				watch: '../nikksy/kayit_source/**/*.less',
+				src: '../nikksy/kayit_source/css/main.less',
+				dest: '../nikksy/kayit/css'
 			}
 		};
 		//}}}
@@ -51,7 +44,9 @@
 				// .pipe(sourcemaps.init())
 		        .pipe(uglify())
 		        .pipe(rename(function(path) {
-					path.basename += '.min';
+		            if (path.basename.indexOf('load') === -1) {
+		                path.basename += '.min';
+		            }
 		        }))
 				.pipe(changed(paths.js.dest))
 		        //.pipe(gulp.dest(function(b) {
@@ -62,18 +57,6 @@
 				//}))
 				// .pipe(sourcemaps.write(paths.js.map))
 				.pipe(gulp.dest(paths.js.dest))
-				.pipe(livereload({auto:false}));
-		});
-
-		gulp.task('uglify2', function() {
-		    gulp.src(paths.js.src1)
-				.pipe(plumber())
-		        .pipe(uglify())
-		        .pipe(rename(function(path) {
-					path.basename += '.min';
-		        }))
-				.pipe(changed(paths.js.dest))
-				.pipe(gulp.dest(paths.js.dest1))
 				.pipe(livereload({auto:false}));
 		});
 		//}}}
@@ -89,18 +72,6 @@
 				}))
 				//.pipe(changed(paths.less.dest))
 				.pipe(gulp.dest(paths.less.dest))
-				.pipe(livereload({auto:false}));
-		});
-
-		gulp.task('less2', function() {
-			gulp.src(paths.less.src1)
-				.pipe(plumber())
-				.pipe(less())
-				.pipe(min_css({compatibility:'ie7'}))
-				.pipe(rename(function(path) {
-					path.basename += '.min'
-				}))
-				.pipe(gulp.dest(paths.less.dest1))
 				.pipe(livereload({auto:false}));
 		});
 		//}}}
@@ -148,56 +119,14 @@
 					auto: false
 				}));
 		});
-		
-		gulp.task('html2', function() {
-			gulp.src(paths.html.src1)
-				.pipe(changed(paths.html.dest))
-				.pipe(plumber())
-				.pipe(inject(head, {
-					starttag: '<!--inject:head-->',
-					transform: function(filePath, file) {
-						return file.contents.toString('utf-8');
-					}
-				}))
-				.pipe(inject(nav, {
-					starttag: '<!--inject:nav-->',
-					transform: function(filePath, file) {
-						return file.contents.toString('utf-8');
-					}
-				}))
-				.pipe(inject(footer, {
-					starttag: '<!--inject:footer-->',
-					transform: function(filePath, file) {
-						return file.contents.toString('utf-8');
-					}
-				}))
-				.pipe(inject(google, {
-					starttag: '<!--inject:google-->',
-					transform: function(filePath, file) {
-						return file.contents.toString('utf-8');
-					}
-				}))
-				.pipe(html_min({
-					removeComments: true,
-					collapseWhitespace: true
-				}))
-				.pipe(gulp.dest(paths.html.dest1))
-				.pipe(livereload({
-					auto: false
-				}));
-		});
-
 		//}}}
 
 		// wathc{{{
 		gulp.task('watch', function() {
 			livereload.listen();
 			gulp.watch(paths.js.src, ['uglify']);
-			gulp.watch(paths.js.src1, ['uglify2']);
 			gulp.watch(paths.less.watch, ['less']);
-			gulp.watch(paths.less.watch1, ['less2']);
 			gulp.watch(paths.html.src, ['html']);
-			gulp.watch(paths.html.src1, ['html2']);
 		});
 		//}}}
 
