@@ -3,7 +3,10 @@
 import os,glob
 from xml.etree import ElementTree
 
-fs=glob.glob('./*.conf.js')
+print 
+
+# fs=glob.glob('./*.conf.js')
+fs=glob.glob(os.path.split(os.path.realpath(__file__))[0]+'\\*.conf.js')
 conf=[]
 
 for f in fs:

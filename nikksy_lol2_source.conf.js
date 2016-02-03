@@ -21,25 +21,25 @@
 		// 定义工作路径 {{{
 		var paths = {
 			js: {
-				src: ['../nikksy/nl_lol/2_source/**/*.js'],
-				dest: '../nikksy/nl_lol/2',
+				src: ['../nikksy/nikksy_league_source/**/*.js'],
+				dest: '../nikksy/nikksy_league/',
 				src1: ['../nikksy/kayit_source/**/*.js'],
-				dest1: '../nikksy/kayit',
+				dest1: '../nikksy/kayit/',
 				map: '.'
 			},
 			html: {
-				src: '../nikksy/nl_lol/2_source/*.html',
-				dest: '../nikksy/nl_lol/2',
+				src: '../nikksy/nikksy_league_source/*.html',
+				dest: '../nikksy/nikksy_league/',
 				src1: '../nikksy/kayit_source/*.html',
-				dest1: '../nikksy/kayit'
+				dest1: '../nikksy/kayit/'
 			},
 			less: {
-				watch: '../nikksy/nl_lol/2_source/**/*.less',
-				src: '../nikksy/nl_lol/2_source/css/main.less',
-				dest: '../nikksy/nl_lol/2/css',
+				watch: '../nikksy/nikksy_league_source/**/*.less',
+				src: '../nikksy/nikksy_league_source/css/main.less',
+				dest: '../nikksy/nikksy_league/css/',
 				watch1: '../nikksy/kayit_source/**/*.less',
 				src1: '../nikksy/kayit_source/css/main.less',
-				dest1: '../nikksy/kayit/css'
+				dest1: '../nikksy/kayit/css/'
 			}
 		};
 		//}}}
@@ -150,8 +150,13 @@
 		});
 		
 		gulp.task('html2', function() {
+			var head = gulp.src('../nikksy/kayit_source/template/head.html'),
+				nav = gulp.src('../nikksy/kayit_source/template/nav.html'),
+				google = gulp.src('../nikksy/kayit_source/template/google_code.html'),
+				footer = gulp.src('../nikksy/kayit_source/template/footer.html');
+
 			gulp.src(paths.html.src1)
-				.pipe(changed(paths.html.dest))
+				.pipe(changed(paths.html.dest1))
 				.pipe(plumber())
 				.pipe(inject(head, {
 					starttag: '<!--inject:head-->',

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <body>
-	<caption>nikksy 联赛 source(nikksy/nikksy_league_source) target(nikksy/nikksy_league)</caption>
+	<caption>nikksy 联赛 source(nl_lol/1_source/) target(nl_lol/1/)</caption>
 	<content>
 	<![CDATA[
 		// 载入插件 {{{
@@ -26,7 +26,7 @@
 			},
 			html: {
 				src: '../nikksy/nikksy_league_source/*.html',
-				dest: '../nikksy/nikksy_league'
+				dest: '../nikksy/nikksy_league/'
 			},
 			less: {
 				src: '../nikksy/nikksy_league_source/**/*.less',
