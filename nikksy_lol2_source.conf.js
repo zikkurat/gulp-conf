@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <body>
-	<caption>联赛第二季(nikksy/lol2_source) target(nikksy/lol2)</caption>
+	<caption>联赛第二季(nikksy/nikksy_league_source) target(nikksy/nikksy_league)</caption>
 	<content>
 	<![CDATA[
 		// 载入插件 {{{
