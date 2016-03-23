@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <body>
-	<caption>联赛第二季(nikksy/nikksy_league_source) target(nikksy/nikksy_league)</caption>
+	<caption>联赛报名</caption>
 	<content>
 	<![CDATA[
 		// 载入插件 {{{
@@ -21,25 +21,20 @@
 		// 定义工作路径 {{{
 		var paths = {
 			js: {
-				src: ['../nikksy/nikksy_league_source/**/*.js'],
-				dest: '../nikksy/nikksy_league/',
-				src1: ['../nikksy/kayit_source/**/*.js'],
-				dest1: '../nikksy/kayit/',
-				map: '.'
+				src: ['../nikksy/kayit_source/**/*.js'],
+				dest: '../nikksy/kayit/'
 			},
 			html: {
-				src: '../nikksy/nikksy_league_source/*.html',
-				dest: '../nikksy/nikksy_league/',
-				src1: '../nikksy/kayit_source/*.html',
-				dest1: '../nikksy/kayit/'
+				src: '../nikksy/kayit_source/*.html',
+				dest: '../nikksy/kayit/'
 			},
 			less: {
-				watch: '../nikksy/nikksy_league_source/**/*.less',
-				src: '../nikksy/nikksy_league_source/css/main.less',
-				dest: '../nikksy/nikksy_league/css/',
-				watch1: '../nikksy/kayit_source/**/*.less',
-				src1: '../nikksy/kayit_source/css/main.less',
-				dest1: '../nikksy/kayit/css/'
+				watch: '../nikksy/kayit_source/css/*.less',
+				src: '../nikksy/kayit_source/css/main.less',
+				dest: '../nikksy/kayit/css/',
+				watch1: '../nikksy/kayit_source/css3/*.less',
+				src1: '../nikksy/kayit_source/css3/main.less',
+				dest1: '../nikksy/kayit/css3/',
 			}
 		};
 		//}}}
@@ -62,18 +57,6 @@
 				//}))
 				// .pipe(sourcemaps.write(paths.js.map))
 				.pipe(gulp.dest(paths.js.dest))
-				.pipe(livereload({auto:false}));
-		});
-
-		gulp.task('uglify2', function() {
-		    gulp.src(paths.js.src1)
-				.pipe(plumber())
-		        .pipe(uglify())
-		        .pipe(rename(function(path) {
-					path.basename += '.min';
-		        }))
-				.pipe(changed(paths.js.dest))
-				.pipe(gulp.dest(paths.js.dest1))
 				.pipe(livereload({auto:false}));
 		});
 		//}}}
@@ -148,61 +131,15 @@
 					auto: false
 				}));
 		});
-		
-		gulp.task('html2', function() {
-			var head = gulp.src('../nikksy/kayit_source/template/head.html'),
-				nav = gulp.src('../nikksy/kayit_source/template/nav.html'),
-				google = gulp.src('../nikksy/kayit_source/template/google_code.html'),
-				footer = gulp.src('../nikksy/kayit_source/template/footer.html');
-
-			gulp.src(paths.html.src1)
-				.pipe(changed(paths.html.dest1))
-				.pipe(plumber())
-				.pipe(inject(head, {
-					starttag: '<!--inject:head-->',
-					transform: function(filePath, file) {
-						return file.contents.toString('utf-8');
-					}
-				}))
-				.pipe(inject(nav, {
-					starttag: '<!--inject:nav-->',
-					transform: function(filePath, file) {
-						return file.contents.toString('utf-8');
-					}
-				}))
-				.pipe(inject(footer, {
-					starttag: '<!--inject:footer-->',
-					transform: function(filePath, file) {
-						return file.contents.toString('utf-8');
-					}
-				}))
-				.pipe(inject(google, {
-					starttag: '<!--inject:google-->',
-					transform: function(filePath, file) {
-						return file.contents.toString('utf-8');
-					}
-				}))
-				.pipe(html_min({
-					removeComments: true,
-					collapseWhitespace: true
-				}))
-				.pipe(gulp.dest(paths.html.dest1))
-				.pipe(livereload({
-					auto: false
-				}));
-		});
-
 		//}}}
 
 		// wathc{{{
 		gulp.task('watch', function() {
 			livereload.listen();
 			gulp.watch(paths.js.src, ['uglify']);
-			gulp.watch(paths.js.src1, ['uglify2']);
 			gulp.watch(paths.less.watch, ['less']);
 			gulp.watch(paths.less.watch1, ['less2']);
 			gulp.watch(paths.html.src, ['html']);
-			gulp.watch(paths.html.src1, ['html2']);
 		});
 		//}}}
 
