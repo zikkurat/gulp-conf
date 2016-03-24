@@ -35,6 +35,9 @@
 				watch1: '../nikksy/kayit_source/css3/*.less',
 				src1: '../nikksy/kayit_source/css3/main.less',
 				dest1: '../nikksy/kayit/css3/',
+				watch2: '../nikksy/kayit_source/cr/s1/css/*.less',
+				src2: '../nikksy/kayit_source/cr/s1/css/main.less',
+				dest2: '../nikksy/kayit/cr/s1/css/',
 			}
 		};
 		//}}}
@@ -84,6 +87,18 @@
 					path.basename += '.min'
 				}))
 				.pipe(gulp.dest(paths.less.dest1))
+				.pipe(livereload({auto:false}));
+		});
+
+		gulp.task('less3', function() {
+			gulp.src(paths.less.src2)
+				.pipe(plumber())
+				.pipe(less())
+				.pipe(min_css({compatibility:'ie7'}))
+				.pipe(rename(function(path) {
+					path.basename += '.min'
+				}))
+				.pipe(gulp.dest(paths.less.dest2))
 				.pipe(livereload({auto:false}));
 		});
 		//}}}
@@ -139,6 +154,7 @@
 			gulp.watch(paths.js.src, ['uglify']);
 			gulp.watch(paths.less.watch, ['less']);
 			gulp.watch(paths.less.watch1, ['less2']);
+			gulp.watch(paths.less.watch2, ['less3']);
 			gulp.watch(paths.html.src, ['html']);
 		});
 		//}}}
