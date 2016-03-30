@@ -70,45 +70,43 @@
 
 		gulp.task('ui',function() {
 			gulp.src('../nikksy/test/jsx/*.jsx')
+				.pipe(plumber())
 				.pipe(react())
-				//.pipe(concat('ui.js'))
-				.pipe(gulp.dest('../nikksy/test/jsx'));
-
-			return gulp.src('../nikksy/test/jsx/*.js')
-						.pipe(amd('ui',{
-							baseUrl: '../nikksy/test/jsx/',
-							paths:{
-								jquery:'../../js/jquery-2.1.4.min',
-								react:'../../js/react-with-addons.min',
-								ReactDom:'../../js/react-dom.min',
-							},
-							exclude:['jquery','react','ReactDom'],
-						}))
-						.pipe(concat('ui.js'))
-						.pipe(gulp.dest('../nikksy/test_dest'));
+				.pipe(amd('ui',{
+					baseUrl: '../nikksy/test/jsx/',
+					paths:{
+						jquery:'../../js/jquery-2.1.4.min',
+						react:'../../js/react-with-addons.min',
+						ReactDom:'../../js/react-dom.min',
+					},
+					exclude:['jquery','react','ReactDom'],
+				}))
+				.pipe(concat('ui.js'))
+				.pipe(uglify())
+				.pipe(gulp.dest('../nikksy/test_dest'));
 		});
 
-		//gulp.task('amdmake', function() {
-			//gulp.src('../nikksy/test/js/main.jsx')
-				//.pipe(react())
-				//.pipe(gulp.dest('../nikksy/test/js'));
+		gulp.task('mod', function() {
+			gulp.src('../nikksy/test/js/main.jsx')
+				.pipe(react())
+				.pipe(gulp.dest('../nikksy/test/js'));
 
-			//return gulp.src('../nikksy/test/mod/*.js')
-				//.pipe(plumber())
-				//.pipe(amd('../js/main', {
-					//baseUrl: '../nikksy/test/mod/',
-					//exclude: ['jquery', 'react', 'ReactDom','btn'],
-					//paths: {
-						//'jquery': '../../js/jquery-2.1.4.min',
-						//'react': '../../js/react-with-addons.min',
-						//'ReactDom': '../../js/react-dom.min',
-						//'btn':'../jsx/button'
-					//}
-				//}))
-				//.pipe(concat('main.js'))
-				//.pipe(uglify())
-				//.pipe(gulp.dest('../nikksy/test_dest'));
-		//});
+			return gulp.src('../nikksy/test/mod/*.js')
+				.pipe(plumber())
+				.pipe(amd('../js/main', {
+					baseUrl: '../nikksy/test/mod/',
+					exclude: ['jquery', 'react', 'ReactDom','ui'],
+					paths: {
+						'jquery': '../../js/jquery-2.1.4.min',
+						'react': '../../js/react-with-addons.min',
+						'ReactDom': '../../js/react-dom.min',
+						'ui':'../../test_dest/ui'
+					}
+				}))
+				.pipe(concat('main.js'))
+				.pipe(uglify())
+				.pipe(gulp.dest('../nikksy/test_dest'));
+		});
 
 		gulp.task('r',function() {
 		});
@@ -117,8 +115,7 @@
 		gulp.task('watch', function() {
 			gulp.watch('../nikksy/test/*.html',['html']);
 			gulp.watch('../nikksy/test/jsx/*.jsx',['ui','js']);
-			//gulp.watch(['../nikksy/test/**/*.js', '../nikksy/test/**/*.jsx'], ['js', 'amdmake']);
-			//gulp.watch(['../nikksy/test/**/*.jsx'],['js','r']);
+			gulp.watch(['../nikksy/test/mod/*.js', '../nikksy/test/js/*.jsx'], ['mod','js']);
 			livereload.listen();
 			//gulp.watch('../test/source/*.less', ['less']);
 			//gulp.watch('../test/source/*.js', ['uglify']);
